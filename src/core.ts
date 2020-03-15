@@ -60,7 +60,7 @@ export class Core {
             await this.readFile(cFile);
         }
     }
-    readFile = (fileName: string) => {
+    async readFile(fileName: string){
         let _self = this;
         return new Promise((resolve, reject) => {
             fs.readFile(fileName, "utf8", function(error, data: string) {
@@ -72,12 +72,12 @@ export class Core {
             });
         });
     };
-    saveFile = (channelName: string,data:any) => {
+    async saveFile(channelName: string,data:any){
         this.checkDirectory();
         return new Promise((resolve, reject) => {
             fs.writeFile(this.dir + "/" + channelName + '.json', data, function(err) {
                 if (err) return reject(err);
-                console.log(channelName + "data file saved");
+                console.log(channelName + " file saved");
                 resolve();
             });
         });
