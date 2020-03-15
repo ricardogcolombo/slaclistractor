@@ -9,10 +9,7 @@ export class Users extends Core {
         this.getListOfUsers()
     }
     async getListOfUsers(){
-        return this.getAbstractList(this.getUsers,this.saveData)
-    }
-    private saveData = (members:any)=>{
-        this.dataList=this.dataList.concat(members)
+        return this.getDataFile(this.getUsers)
     }
     getUsers = () => this.getPublic(this.endpoint);
 }

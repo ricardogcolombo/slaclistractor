@@ -4,21 +4,15 @@ import {ChannelFactory} from "./channelFactory";
 import arg from "arg";
 dotenv.config();
 class Client {
-    constructor(argv: any, token: string) {
-        const {channelsP, dir} = this.parseArguments(argv);
-        const channelFactory = new ChannelFactory(token, dir);
-
-        // if (channels) channels.forEach((channel: string) => channelFactory.getLoggedChannels(channel));
-        if (channelsP) channelFactory.getChannelsHistory(channelsP)
-        // if (im) im.forEach((channel: string) => channelFactory.getLoggedChannels(channel, true));
-        // if (imp) imp.forEach((channel: string) => channelFactory.getLoggedChannels(channel, true));
+    private token='';
+    constructor(token:string){
+        this.token = token;
     }
     parseArguments(rawArgs: any) {
         const args = arg(
             {
                 "--im": String,
                 "--c": String,
-                "--cP": String,
                 "--imp": String,
                 "--dir": String,
             },
@@ -27,14 +21,15 @@ class Client {
         return {
             im: (args["--im"] || "").split(",") || false,
             channels: (args["--c"] || "").split(",") || false,
-            channelsP: (args["--cP"] || "").split(",") || false,
             imp: (args["--imp"] || "").split(",") || false,
             dir: args["--dir"] || "/data",
         };
     }
 
-    getMessages() {
-        console.log("processing");
+    getMessages(argv:any) {
+        const {channels, dir} = this.parseArguments(argv);
+        const channelFactory= new ChannelFactory(this.token, dir);
+        channelFactory.getData(channels)
     }
 }
 if (process.env.TOKEN == undefined) {
@@ -42,5 +37,5 @@ if (process.env.TOKEN == undefined) {
     console.log(ERROR_TOKEN);
     process.exit(1);
 }
-const client = new Client(process.argv, process.env.TOKEN);
-client.getMessages();
+const client = new Client(process.env.TOKEN);
+client.getMessages(process.argv);
