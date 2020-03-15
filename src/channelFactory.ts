@@ -1,31 +1,64 @@
 import axios from "axios";
 import fs from "fs";
+import {Core} from "./core";
 
-export class ChannelFactory {
-    private TOKEN = "";
-    private dir = "";
-    private SLACK_URL = "https://slack.com/api/conversations.";
+export class ChannelFactory extends Core {
+    private endpoint = "users.conversations";
+    private datafile = "/channels.json";
+    private channelList :any = [];
     constructor(token: string, dir: string) {
-        this.TOKEN = token;
-        this.dir = dir;
+        super(token, dir);
+        this.saveChannels();
     }
+    private async saveChannels() {
+        const cFile = this.dir + this.datafile;
+        if (!fs.existsSync(cFile)) {
+            console.log("getting data from slack api");
+            let nextCursor = true;
+            let originalUrl = this.getChannels();
+            let url = originalUrl;
+            while (nextCursor) {
+                console.log(url);
+                let {
+                    data: {channels, response_metadata},
+                } = await axios.get(url);
+                this.channelList = this.channelList.concat(channels);
+                if (response_metadata && response_metadata.next_cursor) {
+                    url = this.next(response_metadata.next_cursor, originalUrl);
+                } else {
+                    nextCursor = false;
+                }
+            }
+            if (this.channelList.length > 0)
+                fs.writeFile(cFile, JSON.stringify(this.channelList), "utf8", (err) => {
+                    if (err) throw err;
+                    console.log("Channels Saved to file");
+                });
+        }else{
+            fs.readFile(cFile, 'utf8', (err, contents:string) =>{
+                if(err) throw err;
+                console.log('read channels file');
+                this.channelList = JSON.parse(contents);
+            });
+        }
+    }
+    public getChannelsHistory(channels: string[]) {
+        console.log("getData" + channels);
+    }
+    private getChannels = () =>
+        this.getPublic(this.endpoint) + "&types=private_channel,public_channel,im,mpim";
 
-    private getPublic = () => this.SLACK_URL + "list?token=" + this.TOKEN;
-
-    private getChannels = (priv?: boolean) => this.getPublic() + (priv ? "&types=private_channel" : "");
-
-    private getHistory = (channelName: string) => this.SLACK_URL + "history?token=" + this.TOKEN + "&channel=" + channelName;
-
-    private next = (nextCursor: string, url: string) => url + "&cursor=" + nextCursor;
+    private getHistory = (channelName: string) =>
+        this.SLACK_URL + this.endpoint + "history?token=" + this.TOKEN + "&channel=" + channelName;
 
     getChannelsName = (list: {data: {channels: any[]}}) =>
         list.data.channels.map((item: {name: string; id: string}) => {
             return {name: item.name, id: item.id};
         });
 
-    getLoggedChannels = async (channel: string, priv?: boolean) => {
+    getLoggedChannels = async (channel: string) => {
         let nextCursor = true;
-        let originalUrl = this.getChannels(priv);
+        let originalUrl = this.getChannels();
         let url = originalUrl;
         let c_data;
 
