@@ -9,20 +9,10 @@ export class Users extends Core {
         this.getListOfUsers()
     }
     async getListOfUsers(){
-        let nextCursor = true;
-        console.log('Getting List of Users,Please Wait');
-
-        let originalUrl = this.getPublic(this.endpoint);
-        let url = originalUrl;
-        while (!!nextCursor) {
-            const {
-                data: {members, response_metadata},
-            } = await axios.get(url);
-            this.userList = this.userList.concat(members)
-
-            nextCursor = response_metadata ? !!response_metadata.next_cursor : false;
-
-            url = this.next(response_metadata.next_cursor, originalUrl);
-        }
+        return this.getAbstractList(this.getUsers,this.saveData)
     }
+    private saveData = (members:any)=>{
+        this.dataList=this.dataList.concat(members)
+    }
+    getUsers = () => this.getPublic(this.endpoint);
 }

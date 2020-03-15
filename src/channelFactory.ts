@@ -4,50 +4,21 @@ import {Core} from "./core";
 
 export class ChannelFactory extends Core {
     private endpoint = "users.conversations";
-    private datafile = "/channels.json";
-    private channelList :any = [];
     constructor(token: string, dir: string) {
-        super(token, dir);
+        super(token, dir,'/channels.json');
         this.saveChannels();
     }
     private async saveChannels() {
-        const cFile = this.dir + this.datafile;
-        if (!fs.existsSync(cFile)) {
-            console.log("getting data from slack api");
-            let nextCursor = true;
-            let originalUrl = this.getChannels();
-            let url = originalUrl;
-            while (nextCursor) {
-                console.log(url);
-                let {
-                    data: {channels, response_metadata},
-                } = await axios.get(url);
-                this.channelList = this.channelList.concat(channels);
-                if (response_metadata && response_metadata.next_cursor) {
-                    url = this.next(response_metadata.next_cursor, originalUrl);
-                } else {
-                    nextCursor = false;
-                }
-            }
-            if (this.channelList.length > 0)
-                fs.writeFile(cFile, JSON.stringify(this.channelList), "utf8", (err) => {
-                    if (err) throw err;
-                    console.log("Channels Saved to file");
-                });
-        }else{
-            fs.readFile(cFile, 'utf8', (err, contents:string) =>{
-                if(err) throw err;
-                console.log('read channels file');
-                this.channelList = JSON.parse(contents);
-            });
-        }
+        return this.getAbstractList(this.getChannels,this.saveData)
     }
     public getChannelsHistory(channels: string[]) {
         console.log("getData" + channels);
     }
     private getChannels = () =>
         this.getPublic(this.endpoint) + "&types=private_channel,public_channel,im,mpim";
-
+    private saveData = (channels:any)=>{
+        this.dataList=this.dataList.concat(channels)
+    }
     private getHistory = (channelName: string) =>
         this.SLACK_URL + this.endpoint + "history?token=" + this.TOKEN + "&channel=" + channelName;
 
