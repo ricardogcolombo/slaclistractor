@@ -11,18 +11,20 @@ class Client {
     parseArguments(rawArgs: any) {
         const args = arg(
             {
-                "--im": String,
-                "--c": String,
-                "--imp": String,
+                "-d": String,
+                "-m": String,
+                "--directmessage": String,
+            
+                "-c": String,
+                "--channel": String,
                 "--dir": String,
             },
             {argv: rawArgs.slice(2)},
         );
         return {
-            im: (args["--im"] || "").split(",") || false,
-            channels: (args["--c"] || "").split(",") || false,
-            imp: (args["--imp"] || "").split(",") || false,
-            dir: args["--dir"] || "/data",
+            im: (args["-m"] ||args["--directmessage"]|| "").split(",") || false,
+            channels: (args["-c"] || args["--channel"]|| "").split(",") || false,
+            dir: (args["-d"] ||args["--dir"]|| "./data")
         };
     }
 

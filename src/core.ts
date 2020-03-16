@@ -65,7 +65,6 @@ export class Core {
         return new Promise((resolve, reject) => {
             fs.readFile(fileName, "utf8", function(error, data: string) {
                 if (error) throw reject(error);
-                console.log("test1");
                 const items = JSON.parse(data);
                 items.forEach((item: {name: string; id: string}) => _self.dataList.set(item.name || item.id, item));
                 resolve();

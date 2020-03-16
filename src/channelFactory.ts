@@ -15,7 +15,13 @@ export class ChannelFactory extends Core {
         return this.getDataFile(this.getChannels);
     }
     public async getChannelsHistory(channels: string[]) {
-        var names = channels.filter((item) => this.dataList.has(item));
+        var names = channels.map(item=>{
+            if(this.dataList.has(item)){
+                    return item;
+            }else{
+                console.log("channel "+item+" does not exists");
+            }
+        }).filter(item=>this.dataList.has(item))
         var calls = names.map(async (item) => {
             const channelInfo = this.dataList.get(item);
             return await this.getHistoryData(channelInfo);
