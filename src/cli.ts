@@ -1,7 +1,8 @@
 #!/usr/bin/env node
 import dotenv from "dotenv";
-import {ChannelFactory} from "./channelFactory";
 import arg from "arg";
+import {Messages} from './messages'
+
 dotenv.config();
 class Client {
     private token='';
@@ -30,7 +31,7 @@ class Client {
 
     getMessages(argv:any) {
         const {channels, dir} = this.parseArguments(argv);
-        const channelFactory= new ChannelFactory(this.token, dir);
+        const channelFactory= new Messages(this.token, dir);
         channelFactory.getData(channels)
     }
 }

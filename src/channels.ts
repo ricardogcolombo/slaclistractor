@@ -1,17 +1,15 @@
 import axios from "axios";
 import {Core} from "./core";
+import { UserHandler } from "./users";
 
-export class ChannelFactory extends Core {
+export class ChannelsManager extends Core {
     private endpoint = "users.conversations";
     private conversations = "conversations.history";
+    private _users:UserHandler;
     constructor(token: string, dir: string) {
         super(token, dir, "/channels.json");
     }
-    async getData(channels: string[]) {
-        await this.loadChannels();
-        if (channels) await this.getChannelsHistory(channels);
-    }
-    private async loadChannels() {
+    async loadChannels() {
         return this.getDataFile(this.getChannels);
     }
     public async getChannelsHistory(channels: string[]) {

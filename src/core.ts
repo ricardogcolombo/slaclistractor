@@ -1,6 +1,5 @@
 import fs from "fs";
 import axios from "axios";
-import util from "util";
 
 export class Core {
     protected TOKEN = "";
@@ -38,11 +37,14 @@ export class Core {
                     data: {channels, members, response_metadata},
                 } = await axios.get(url);
                 if (channels) {
+                    console.log("get channels");
                     channels.forEach((item: {name: string}) => {
                         console.log(item.name);
                         this.dataList.set(item.name, item);
                     });
                 } else {
+                    console.log("get users");
+                    console.log(members);
                     members.forEach((item: {name: string}) => this.dataList.set(item.name, item));
                 }
                 if (response_metadata && response_metadata.next_cursor) {

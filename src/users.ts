@@ -1,12 +1,10 @@
 import {Core} from "./core";
-import axios from 'axios'
 
-export class Users extends Core {
+export class UserHandler extends Core {
     private endpoint = "users.list?";
     userList = []
     constructor(token:string,dir:string){
-        super(token,dir)
-        this.getListOfUsers()
+        super(token,dir,'/users.json')
     }
     async getListOfUsers(){
         return this.getDataFile(this.getUsers)
