@@ -11,22 +11,20 @@ export class ChannelsManager extends Core {
     async loadChannels() {
         return this.getDataFile(this.getChannels);
     }
-    public async getChannelsHistory(channels: string[]) {
-        var names = channels.filter((item) => {
-            var isPresent = this.dataList.has(item);
-            if (!isPresent) console.log("channel " + item + " does not exists");
+    public async getChannelsHistory(channels: string[],getUserName:(id:string)=>string) {
+        var names = channels.filter((id) => {
+            var isPresent = this.nameDictionary.has(id);
+            // if (!isPresent) console.log("channel does not exists");
             return isPresent;
         });
         var calls = names.map(async (item) => {
-            const channelInfo = this.dataList.get(item);
-            return await this.getHistoryData(channelInfo);
+            const channelInfo = this.nameDictionary.get(item);
+            return await this.getHistoryData(channelInfo,getUserName);
         });
         return Promise.all(calls);
     }
-    private getChannels() {
-        return this.getPublic(this.endpoint) + "&types=private_channel,public_channel,im,mpim";
-    }
-
+    getChannels= () => this.getPublic(this.endpoint) + "&types=private_channel,public_channel,mpim,im";
+    
     private getHistory(channelName: string) {
         return this.SLACK_URL + this.conversations + "?token=" + this.token +"&channel=" + channelName;
     }
@@ -37,7 +35,7 @@ export class ChannelsManager extends Core {
         });
     }
 
-    async getHistoryData(channel: {name: string; id: string}) {
+    async getHistoryData(channel: {name: string; id: string,user:string},getUserName:(id:string)=>string) {
         const _self = this;
         return new Promise(async function(resolve) {
             console.log("Downloading data from " + channel.name);
@@ -61,7 +59,7 @@ export class ChannelsManager extends Core {
                 }
             }
 
-            await _self.saveFile(channel.name, JSON.stringify(history));
+            await _self.saveFile(channel.name|| getUserName(channel.user), JSON.stringify(history));
             resolve();
         });
     }

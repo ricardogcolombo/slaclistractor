@@ -19,6 +19,6 @@ export class MessageExtractor extends Core {
 
         var dms = await this._userManager.getUserChannel(users);
         let messageList = channels.concat(dms)
-        if (channels) await this._channelManager.getChannelsHistory(messageList);
+        if (channels) await this._channelManager.getChannelsHistory(messageList,this._userManager.getUserName);
     }
 }

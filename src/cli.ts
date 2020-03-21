@@ -23,8 +23,8 @@ class Client {
             {argv: rawArgs.slice(2)},
         );
         return {
-            im: (args["-m"] ||args["--directmessage"]|| "").split(",") || false,
-            channels: (args["-c"] || args["--channel"]|| "").split(",") || false,
+            im: (args["-m"] ||args["--directmessage"]|| "").split(",").filter(item=>item.length>0) || false,
+            channels: (args["-c"] || args["--channel"]|| "").split(",").filter(item=>item.length>0) || false,
             dir: (args["-d"] ||args["--dir"]|| "./data")
         };
     }
