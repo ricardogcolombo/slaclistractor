@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 import dotenv from "dotenv";
 import arg from "arg";
-import {Messages} from './messages'
+import {MessageExtractor} from './messages'
 
 dotenv.config();
 class Client {
@@ -30,9 +30,9 @@ class Client {
     }
 
     getMessages(argv:any) {
-        const {channels, dir} = this.parseArguments(argv);
-        const channelFactory= new Messages(this.token, dir);
-        channelFactory.getData(channels)
+        const {channels,im, dir} = this.parseArguments(argv);
+        const channelFactory= new MessageExtractor(this.token, dir);
+        channelFactory.getData(channels,im)
     }
 }
 if (process.env.TOKEN == undefined) {

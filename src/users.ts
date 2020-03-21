@@ -10,4 +10,7 @@ export class UserHandler extends Core {
         return this.getDataFile(this.getUsers)
     }
     getUsers = () => this.getPublic(this.endpoint);
+    async getUserChannel(users:string[]):Promise<string[]>{
+        return users.map(name=> this.dataList.get(name).id)
+    }
 }

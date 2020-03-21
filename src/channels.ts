@@ -1,11 +1,10 @@
 import axios from "axios";
 import {Core} from "./core";
-import { UserHandler } from "./users";
 
 export class ChannelsManager extends Core {
     private endpoint = "users.conversations";
     private conversations = "conversations.history";
-    private _users:UserHandler;
+
     constructor(token: string, dir: string) {
         super(token, dir, "/channels.json");
     }
@@ -13,13 +12,11 @@ export class ChannelsManager extends Core {
         return this.getDataFile(this.getChannels);
     }
     public async getChannelsHistory(channels: string[]) {
-        var names = channels.map(item=>{
-            if(this.dataList.has(item)){
-                    return item;
-            }else{
-                console.log("channel "+item+" does not exists");
-            }
-        }).filter(item=>this.dataList.has(item))
+        var names = channels.filter((item) => {
+            var isPresent = this.dataList.has(item);
+            if (!isPresent) console.log("channel " + item + " does not exists");
+            return isPresent;
+        });
         var calls = names.map(async (item) => {
             const channelInfo = this.dataList.get(item);
             return await this.getHistoryData(channelInfo);
@@ -31,7 +28,7 @@ export class ChannelsManager extends Core {
     }
 
     private getHistory(channelName: string) {
-        return this.SLACK_URL + this.conversations + "?token=" + this.TOKEN + "&channel=" + channelName;
+        return this.SLACK_URL + this.conversations + "?token=" + this.token +"&channel=" + channelName;
     }
 
     getChannelsName(list: {data: {channels: any[]}}) {
