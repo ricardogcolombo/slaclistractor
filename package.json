@@ -1,12 +1,11 @@
 {
   "name": "slaclistractor",
   "version": "0.0.1",
-  "description": "",
+  "description": "Extract your slack messages from your terminal",
   "main": "src/index.js",
   "bin": "lib/index.js",
   "scripts": {
-    "build": "tsc",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build": "tsc"
   },
   "author": "",
   "license": "ISC",
