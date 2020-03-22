@@ -7,13 +7,12 @@
   "scripts": {
     "build": "tsc"
   },
-  "author": "",
+  "author": "ricardogcolombo",
   "license": "ISC",
   "devDependencies": {
     "@types/node": "^13.9.1",
     "typescript": "^3.8.3"
   },
-  "publishConfig": { "registry": "https://npm.pkg.github.com/" },
   "dependencies": {
     "@types/dotenv": "^8.2.0",
     "@types/inquirer": "^6.5.0",
