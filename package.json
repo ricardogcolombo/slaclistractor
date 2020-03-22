@@ -2,8 +2,8 @@
   "name": "slaclistractor",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
-  "bin": "lib/cli.js",
+  "main": "src/index.js",
+  "bin": "lib/index.js",
   "scripts": {
     "build": "tsc",
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -16,6 +16,7 @@
   },
   "dependencies": {
     "@types/dotenv": "^8.2.0",
+    "@types/inquirer": "^6.5.0",
     "arg": "^4.1.3",
     "axios": "^0.19.2",
     "dotenv": "^8.2.0",
