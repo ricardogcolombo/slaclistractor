@@ -2,8 +2,9 @@ import axios from "axios";
 import {Core} from "./core";
 
 export class ChannelsManager extends Core {
-    private endpoint = "users.conversations";
-    private conversations = "conversations.history";
+    private ENDPOINT = "users.conversations";
+    private CONVERSATIONS = "conversations.history";
+    private PARAMETERS = "&types=private_channel,public_channel,mpim,im";
 
     constructor(token: string, dir: string) {
         super(token, dir, "/channels.json");
@@ -23,10 +24,10 @@ export class ChannelsManager extends Core {
         });
         return Promise.all(calls);
     }
-    getChannels= () => this.getPublic(this.endpoint) + "&types=private_channel,public_channel,mpim,im";
+    getChannels= () => this.getPublic(this.ENDPOINT) + this.PARAMETERS;
     
     private getHistory(channelName: string) {
-        return this.SLACK_URL + this.conversations + "?token=" + this.token +"&channel=" + channelName;
+        return this.SLACK_URL + this.CONVERSATIONS + "?token=" + this.token +"&channel=" + channelName;
     }
 
     getChannelsName(list: {data: {channels: any[]}}) {
