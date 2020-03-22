@@ -12,15 +12,20 @@ class Client {
     parseArguments(rawArgs: any) {
         const args = arg(
             {
-                "-d": String,
-                "-m": String,
                 "--directmessage": String,
-            
-                "-c": String,
                 "--channel": String,
                 "--dir": String,
+
+                //aliases
+                "-c": '--channel',
+                "-d": '--dir',
+                "-m": '--directmessage',
+                
             },
-            {argv: rawArgs.slice(2)},
+            {
+                argv: rawArgs.slice(2),
+                permissive:true
+            },
         );
         return {
             im: (args["-m"] ||args["--directmessage"]|| "").split(",").filter(item=>item.length>0) || false,
