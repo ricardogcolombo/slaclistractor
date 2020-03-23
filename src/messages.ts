@@ -10,15 +10,16 @@ export class MessageExtractor extends Core {
         super(token, dir);
     }
 
-    async getData(channels: string[], users: string[]) {
+    async getData(channels: string[], users: string[],groups:string[]) {
         this._userManager = new UserHandler(this.token,this.dir)
         await this._userManager.getListOfUsers()
-
+        
         this._channelManager= new ChannelsManager(this.token,this.dir);
         await this._channelManager.loadChannels();
+        var gms = this._channelManager.getGroups(groups)
 
         var dms = await this._userManager.getUserChannel(users);
-        let messageList = channels.concat(dms)
+        let messageList = channels.concat(dms).concat(gms)
         if (channels) await this._channelManager.getChannelsHistory(messageList,this._userManager.getUserName);
     }
 }

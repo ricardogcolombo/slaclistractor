@@ -12,7 +12,20 @@ export class ChannelsManager extends Core {
     async loadChannels() {
         return this.getDataFile(this.getChannels);
     }
-    public async getChannelsHistory(channels: string[],getUserName:(id:string)=>string) {
+    getGroups(groups: string[]) {
+        var names: string[] = Array.from(this.nameDictionary.keys());
+        var gms = groups
+            .map((item: string) => item.split("-"))
+            .map((group: string[]) =>
+                names.reduce(
+                    (acum, name) => (group.reduce((present, gnames) => present && name.search(gnames) != -1, true) ? name : acum),
+                    "",
+                ),
+            );
+
+        return gms;
+    }
+    public async getChannelsHistory(channels: string[], getUserName: (id: string) => string) {
         var names = channels.filter((id) => {
             var isPresent = this.nameDictionary.has(id);
             // if (!isPresent) console.log("channel does not exists");
@@ -20,14 +33,14 @@ export class ChannelsManager extends Core {
         });
         var calls = names.map(async (item) => {
             const channelInfo = this.nameDictionary.get(item);
-            return await this.getHistoryData(channelInfo,getUserName);
+            return await this.getHistoryData(channelInfo, getUserName);
         });
         return Promise.all(calls);
     }
-    getChannels= () => this.getPublic(this.ENDPOINT) + this.PARAMETERS;
-    
+    getChannels = () => this.getPublic(this.ENDPOINT) + this.PARAMETERS;
+
     private getHistory(channelName: string) {
-        return this.SLACK_URL + this.CONVERSATIONS + "?token=" + this.token +"&channel=" + channelName;
+        return this.SLACK_URL + this.CONVERSATIONS + "?token=" + this.token + "&channel=" + channelName;
     }
 
     getChannelsName(list: {data: {channels: any[]}}) {
@@ -36,7 +49,7 @@ export class ChannelsManager extends Core {
         });
     }
 
-    async getHistoryData(channel: {name: string; id: string,user:string},getUserName:(id:string)=>string) {
+    async getHistoryData(channel: {name: string; id: string; user: string}, getUserName: (id: string) => string) {
         const _self = this;
         return new Promise(async function(resolve) {
             console.log("Downloading data from " + channel.name);
@@ -60,7 +73,7 @@ export class ChannelsManager extends Core {
                 }
             }
 
-            await _self.saveFile(channel.name|| getUserName(channel.user), JSON.stringify(history));
+            await _self.saveFile(channel.name || getUserName(channel.user), JSON.stringify(history));
             resolve();
         });
     }
