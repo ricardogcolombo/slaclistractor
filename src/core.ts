@@ -6,13 +6,19 @@ export class Core {
     protected _dir = "";
     protected datafile = "";
     protected SLACK_URL = "https://slack.com/api/";
-    protected idDictionary= new Map();
-    protected nameDictionary = new Map();
+    protected _idDictionary= new Map();
+    protected _nameDictionary = new Map();
     constructor(token: string, dir: string, datafile?: string) {
         this._token = token || "";
         this._dir = dir || "";
         this.datafile = datafile || "";
         this.checkDirectory();
+    }
+    get nameDictionary():Map<string,any>{
+        return this._nameDictionary;
+    }
+    get idDictionary():Map<string,any>{
+        return this._idDictionary;
     }
     set token(token: string) {
         this._token = token;
@@ -52,14 +58,14 @@ export class Core {
                 if (channels) {
                     console.info("get channels");
                     channels.forEach((item: {name: string,id:string}) => {
-                        this.idDictionary.set(item.id, item);
-                        this.nameDictionary.set(item.name, item);
+                        this._idDictionary.set(item.id, item);
+                        this._nameDictionary.set(item.name, item);
                     });
                 } else if(members){
                     console.info("get users");
                     members.forEach((item:{user: string,id:string}) => {
-                        this.nameDictionary.set(item.user, item);
-                        this.idDictionary.set(item.id, item);
+                        this._nameDictionary.set(item.user, item);
+                        this._idDictionary.set(item.id, item);
                     });
                 }else{
                     console.info('not members or channels present')
@@ -85,11 +91,11 @@ export class Core {
         return new Promise((resolve, reject) => {
             fs.readFile(fileName, "utf8", function(error, data: string) {
                 if (error) throw reject(error);
-                _self.idDictionary= new Map();
-                _self.nameDictionary= new Map();
+                _self._idDictionary= new Map();
+                _self._nameDictionary= new Map();
                 JSON.parse(data).forEach((item:{name:string,id:string,user:string})=>{
-                    _self.nameDictionary.set(item.name||item.user,item)
-                    _self.idDictionary.set(item.id,item)
+                    _self._nameDictionary.set(item.name||item.user,item)
+                    _self._idDictionary.set(item.id,item)
                 })
                 resolve();
             });

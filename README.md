@@ -28,7 +28,7 @@ Add slaclistractor to your Slack workspace
 
 <a href="https://slack.com/oauth/v2/authorize?client_id=11221063959.1000724979104&user_scope=channels:history,channels:read,groups:history,groups:read,im:history,im:read,mpim:history,mpim:read,users:read"><img alt="Add to Slack" height="40" width="139" src="https://platform.slack-edge.com/img/add_to_slack.png" srcset="https://platform.slack-edge.com/img/add_to_slack.png 1x, https://platform.slack-edge.com/img/add_to_slack@2x.png 2x"></a>
 
-After that you will need an "Bot User OAuth Access Token" that you can find it here.
+After that you will need an "OAuth Access Token" that you can find it here.
 
 ![Image Token](https://github.com/ricardogcolombo/slaclistractor/blob/master/images/token.png)
 
@@ -48,5 +48,4 @@ for short versions you may use
 
 ### TODO
 - [ ] improve Docs
-- [ ] Support dm in groups of users
-- [ ] Improve logger
+- [ ] Support dm in groups of users [ ] Improve logger
