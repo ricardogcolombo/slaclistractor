@@ -21,7 +21,7 @@ Install the cli in terminal running.
 <a name="installation"></a>
 
 ```shell
-npm -g install slaclistractor
+npm install -g slaclistractor
 ```
 
 Add slaclistractor to your Slack workspace
