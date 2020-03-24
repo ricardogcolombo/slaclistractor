@@ -15,7 +15,7 @@ export class UserHandler extends Core {
             var err = this.nameDictionary.has(name)
             if(!err) console.log('Error: ' + name + " not present, check the if the name is correct, write as it is in slack. This is case sensitive.");
             return err;
-        }).map(item=>this.nameDictionary.get(item).id)
+        }).map(item=>this._nameDictionary.get(item).id)
     }
-    getUserName = (id:string)=> this.idDictionary.get(id).name;
+    getUserName = (id:string)=> this._idDictionary.get(id).name;
 }

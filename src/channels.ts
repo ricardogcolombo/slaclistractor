@@ -13,26 +13,31 @@ export class ChannelsManager extends Core {
         return this.getDataFile(this.getChannels);
     }
     getGroups(groups: string[]) {
-        var names: string[] = Array.from(this.nameDictionary.keys());
+        var names: string[] = Array.from(this._nameDictionary.keys());
         var gms = groups
             .map((item: string) => item.split("-"))
             .map((group: string[]) =>
                 names.reduce(
-                    (acum, name) => (group.reduce((present, gnames) => present && name.search(gnames) != -1, true) ? name : acum),
-                    "",
-                ),
+                    (acum, name) => {
+                        let result= acum;
+                       const newGroup = (group.reduce((present, gnames) => present && name.search(gnames) != -1, true) ? name : '')
+                        if((acum != '' && newGroup!='' && newGroup.split('-').length<acum.length)||(acum==''&& newGroup!='')){
+                            result = newGroup;
+                        }
+                        return result;
+                    }, ""),
             );
 
         return gms;
     }
     public async getChannelsHistory(channels: string[], getUserName: (id: string) => string) {
         var names = channels.filter((id) => {
-            var isPresent = this.nameDictionary.has(id);
-            // if (!isPresent) console.log("channel does not exists");
+            var isPresent = this._nameDictionary.has(id);
+
             return isPresent;
         });
         var calls = names.map(async (item) => {
-            const channelInfo = this.nameDictionary.get(item);
+            const channelInfo = this._nameDictionary.get(item);
             return await this.getHistoryData(channelInfo, getUserName);
         });
         return Promise.all(calls);
