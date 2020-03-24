@@ -24,7 +24,7 @@ Install the cli in terminal running.
 npm install -g slaclistractor
 ```
 
-Add slaclistractor to your Slack workspace
+Add slaclistractor to your Slack workspace clicking the slack button below
 
 <a href="https://slack.com/oauth/v2/authorize?client_id=11221063959.1000724979104&user_scope=channels:history,channels:read,groups:history,groups:read,im:history,im:read,mpim:history,mpim:read,users:read"><img alt="Add to Slack" height="40" width="139" src="https://platform.slack-edge.com/img/add_to_slack.png" srcset="https://platform.slack-edge.com/img/add_to_slack.png 1x, https://platform.slack-edge.com/img/add_to_slack@2x.png 2x"></a>
 
