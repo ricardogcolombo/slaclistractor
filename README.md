@@ -38,14 +38,30 @@ Then you can run and the question would appear and you should paste your token h
 ![Image Token](https://github.com/ricardogcolombo/slaclistractor/blob/master/images/tokenNotFound.png)
 
 ### Parameters
+#### Channels
+Get channels history
 
-- --channel="CHANNELS_NAMES" (Separated with commas)
-- --directmessages="USER_NAMES" (Separated with commas)
+ ``` slaclistractor --channels='channel1,channel2'```
+
+or the short form
+
+``` slaclistractor -c 'channel1,channel2'```
+
+#### Direct Messages 
+Get direct messages from user
+```slaclistractor --directmessage='username1,username2'```
+
 for short versions you may use 
 
-- -d USER_NAMES
-- -c CHANNELS_NAMES
+``` slaclistractor -d 'username1,username2'```
+
+#### Direct Message groups
+Get direct messages when is a group of from users
+```slaclistractor --group='username1-username2, user3-user4-user5'```
+
+for short versions you may use 
+
+``` slaclistractor -g 'username1-username2, user3-user4-user5'```
 
 ### TODO
-- [ ] improve Docs
-- [ ] Support dm in groups of users [ ] Improve logger
+- [ ] Improve logger
