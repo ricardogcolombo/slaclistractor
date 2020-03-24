@@ -48,15 +48,15 @@ or the short form
 ``` slaclistractor -c 'channel1,channel2'```
 
 #### Direct Messages 
-Get direct messages from user
+Get direct messages from user (Note: user name is display name in slack and is case sensitive)
 ```slaclistractor --directmessage='username1,username2'```
 
 for short versions you may use 
 
-``` slaclistractor -d 'username1,username2'```
+``` slaclistractor -m 'username1,username2'```
 
 #### Direct Message groups
-Get direct messages when is a group of from users
+Get direct messages when is a group of from users (Note: user name is display name in slack and is case sensitive)
 ```slaclistractor --group='username1-username2, user3-user4-user5'```
 
 for short versions you may use 
