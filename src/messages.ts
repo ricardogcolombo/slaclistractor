@@ -16,10 +16,12 @@ export class MessageExtractor extends Core {
         
         this._channelManager= new ChannelsManager(this.token,this.dir);
         await this._channelManager.loadChannels();
+        var cList = this._channelManager.getChannelsId(channels);
         var gms = this._channelManager.getGroups(groups)
 
-        var dms = await this._userManager.getUserChannel(users);
-        let messageList = channels.concat(dms).concat(gms)
-        if (channels) await this._channelManager.getChannelsHistory(messageList,this._userManager.getUserName);
+        var usersId= await this._userManager.getUserChannel(users);
+        var dms = this._channelManager.getUsersChannel(usersId)
+        let messageList = cList.concat(dms).concat(gms)
+        if (messageList) await this._channelManager.getChannelsHistory(messageList,this._userManager.getUserName);
     }
 }

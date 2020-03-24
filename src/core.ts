@@ -14,10 +14,10 @@ export class Core {
         this.datafile = datafile || "";
         this.checkDirectory();
     }
-    get nameDictionary():Map<string,any>{
+    get nameDictionary(){
         return this._nameDictionary;
     }
-    get idDictionary():Map<string,any>{
+    get idDictionary(){
         return this._idDictionary;
     }
     set token(token: string) {
@@ -56,15 +56,14 @@ export class Core {
                     data: {channels, members, response_metadata},
                 } = await axios.get(url);
                 if (channels) {
-                    console.info("get channels");
-                    channels.forEach((item: {name: string,id:string}) => {
+                    channels.forEach((item: {name: string,id:string,user:string}) => {
                         this._idDictionary.set(item.id, item);
-                        this._nameDictionary.set(item.name, item);
+                        this._nameDictionary.set(item.name|| item.user, item);
                     });
                 } else if(members){
                     console.info("get users");
-                    members.forEach((item:{user: string,id:string}) => {
-                        this._nameDictionary.set(item.user, item);
+                    members.forEach((item:{id:string,profile:any}) => {
+                        this._nameDictionary.set(item.profile.display_name_normalized, item);
                         this._idDictionary.set(item.id, item);
                     });
                 }else{
@@ -93,8 +92,13 @@ export class Core {
                 if (error) throw reject(error);
                 _self._idDictionary= new Map();
                 _self._nameDictionary= new Map();
-                JSON.parse(data).forEach((item:{name:string,id:string,user:string})=>{
-                    _self._nameDictionary.set(item.name||item.user,item)
+                JSON.parse(data).forEach((item:{user:string,name:string,id:string,profile:any})=>{
+                    if(item.profile){
+                    _self._nameDictionary.set(item.profile.display_name_normalized,item)
+                    }else{
+                    _self._nameDictionary.set(item.name|| item.user,item)
+
+                    }
                     _self._idDictionary.set(item.id,item)
                 })
                 resolve();

@@ -10,9 +10,10 @@ export class UserHandler extends Core {
         return this.getDataFile(this.getUsers)
     }
     getUsers = () => this.getPublic(this.endpoint);
-    async getUserChannel(users:string[]):Promise<string[]>{
+    getUserChannel:(users:string[])=>Promise<string[]>= async (users:string[])=>{
+        var _self = this;
         return users.filter(name=> {
-            var err = this.nameDictionary.has(name)
+            var err = _self.nameDictionary.has(name)
             if(!err) console.log('Error: ' + name + " not present, check the if the name is correct, write as it is in slack. This is case sensitive.");
             return err;
         }).map(item=>this._nameDictionary.get(item).id)

@@ -26,18 +26,18 @@ export class ChannelsManager extends Core {
                         }
                         return result;
                     }, ""),
-            );
+            ).map(name=>this.nameDictionary.get(name).id);
 
         return gms;
     }
     public async getChannelsHistory(channels: string[], getUserName: (id: string) => string) {
         var names = channels.filter((id) => {
-            var isPresent = this._nameDictionary.has(id);
+            var isPresent = this.idDictionary.has(id);
 
             return isPresent;
         });
         var calls = names.map(async (item) => {
-            const channelInfo = this._nameDictionary.get(item);
+            const channelInfo = this.idDictionary.get(item);
             return await this.getHistoryData(channelInfo, getUserName);
         });
         return Promise.all(calls);
@@ -81,5 +81,11 @@ export class ChannelsManager extends Core {
             await _self.saveFile(channel.name || getUserName(channel.user), JSON.stringify(history));
             resolve();
         });
+    }
+    getUsersChannel(users:string[]){
+            return users.map(userid=>this.nameDictionary.get(userid).id)
+    }
+    getChannelsId(channelsNames:string[]){
+            return channelsNames.map(name=>this.nameDictionary.get((name)).id)
     }
 }
