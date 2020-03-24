@@ -53,7 +53,7 @@ Get direct messages from user
 
 for short versions you may use 
 
-``` slaclistractor -d 'username1,username2'```
+``` slaclistractor -m 'username1,username2'```
 
 #### Direct Message groups
 Get direct messages when is a group of from users
